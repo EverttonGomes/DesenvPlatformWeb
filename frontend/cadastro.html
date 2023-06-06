@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEF Cadastro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+</head>
+<body style="background-color:rgba(3, 0, 0, 0.11)">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        const urlParams =   new URLSearchParams(window.location.search);
+        var id        =   urlParams.get("id");
+
+        if (id !== null) {
+
+            axios.get('http://localhost:3000/cliente/'+ id +'')
+            .then(function (response) {
+                document.getElementById('nome').value         =   response.data.nome;
+                document.getElementById('numero').value       =   response.data.numero;
+                document.getElementById('endereco').value     =   response.data.endereco;
+                document.getElementById('servicos').value     =   response.data.servicos;
+
+            })
+            .catch(function (err) {
+                alert(err.message);
+            });
+
+        }
+
+        function titulo() {
+            if (id) {
+                document.getElementById("titulo").innerHTML = 'Atualizar cadastro'
+            } else {
+                document.getElementById("titulo").innerHTML = 'Cadastre-se'
+            }
+        }
+        
+        function botao() {
+            if (id) {
+                document.getElementById("botao").innerHTML = '<button type="button" id="btn" class="btn btn-primary">Atualizar</button>'
+            } else {
+                document.getElementById("botao").innerHTML = '<button type="button" id="btn" class="btn btn-success">Cadastrar</button>'
+            }
+        }
+                
+
+    </script>
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="index.html">AEF GRAF</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="gestao.html">Gestão Administrativa</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    
+    <div class="container">
+
+        <div class="row">
+            <h1 id="titulo"><script>titulo();</script></h1>
+            <hr>
+        <div id = "output"></div>
+        </div>
+        
+        <div class="row">
+            <div class="col"></div>
+                <div class="col">
+                    <form action="" id = "form">
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Nome</label>
+                            <input type="text" class="form-control" id="nome">
+                        </div>
+                        <div class="mb-3">
+                            <label for="numero" class="form-label">Numero de contato</label>
+                            <input type="number" class="form-control" id="numero">
+                        </div>
+                        <div class="mb-3">
+                            <label for="endereco" class="form-label">Endereço</label>
+                            <input type="text" class="form-control" id="endereco">
+                        </div>
+                        <div class="mb-3">
+                            <label for="servicos" class="form-label">Serviços</label>
+                            <input type="number" class="form-control" id="servicos">
+                        </div>
+                        <div class="mb-3">
+                            <div id="botao"><script>botao();</script></div>
+                        </div>
+                    </form>
+                </div>
+            <div class="col">
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const form             =   document.getElementById('form');
+        const _idInput         =   urlParams.get("id");
+        const nomeInput        =   document.getElementById('nome'); 
+        const numeroInput      =   document.getElementById('numero'); 
+        const enderecoInput    =   document.getElementById('endereco');
+        const servicosInput    =   document.getElementById('servicos');
+        
+        btn.addEventListener("click", () => {
+            const _id = (_idInput===null)?'':_idInput;
+            const nome      =  nomeInput.value;
+            const numero    =  numeroInput.value;
+            const endereco  =  enderecoInput.value;
+            const servicos  =  servicosInput.value;
+
+            if (_id === '') {
+
+                axios.post('http://localhost:3000/cliente', {
+                    nome: nome,
+                    numero: parseInt(numero),
+                    endereco: endereco,
+                    servicos: parseInt(servicos)
+                })
+                .then((response) => {
+                    output.innerHTML  =     `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                <strong>Parabéns!</strong> Cadastrado com sucesso.
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>`
+                    form.reset()
+                })
+                .catch(function (err) {
+                    document.getElementById('output').innerHTML =   `<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                                        <strong>Erro!</strong> `+ err.message +`.
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                    </div>`
+                })
+            }else{
+                axios.put('http://localhost:3000/cliente/'+ _id +'', {
+                    nome: nome,
+                    numero: parseInt(numero),
+                    endereco: endereco,
+                    servicos: parseInt(servicos)
+
+                })
+                .then((response) => {
+
+                    output.innerHTML    =   `<div class="alert alert-primary alert-dismissible fade show" role="alert">
+                                            <strong>Parabéns!</strong> Atualização realizada com sucesso.
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>`;                     
+
+                })
+                .catch(function (err){
+                    document.getElementById("output").innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>'+ err.message +'</strong><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                })
+            }
+        })
+
+    </script>
+
+</body>
+</html>
