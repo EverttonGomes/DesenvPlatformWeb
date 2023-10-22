@@ -1,4 +1,4 @@
-# DesenvParaPlatafWEB
+# DesenvPlatformWeb
 Desenvolvimento Para Plataforma WEB
 ## Pagina Principal
 ![image](https://github.com/EverttonGomes/DesenvParaPlatafWEB/assets/97805158/d6af3ba4-c849-465f-b40d-a95692af2a85)
